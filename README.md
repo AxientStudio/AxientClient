@@ -58,12 +58,3 @@ Nếu bạn có bất kỳ góp ý, bug report, hay ý tưởng tính năng nào
 **AxientClient không có license công khai.**  
 Vui lòng **không fork, chỉnh sửa hoặc phát hành lại** project này nếu chưa có sự đồng ý bằng văn bản.
 
----
-
-## 📌 Ghi chú
-
-> Dự án vẫn đang phát triển, các bản cập nhật sẽ được phát hành liên tục.  
-> Hãy ghé lại repo để xem các tính năng mới trong tương lai như:
-> - Quick Server Switch (v2.1)  
-> - Tùy chỉnh chiều cao lửa / khiên  
-> - Tự động nhận diện mod client khác (v3+)
