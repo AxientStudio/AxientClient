@@ -53,8 +53,16 @@ Nếu bạn có bất kỳ góp ý, bug report, hay ý tưởng tính năng nào
 
 ---
 
-## ❗ License
+## 📄 License
 
-**AxientClient không có license công khai.**  
-Vui lòng **không fork, chỉnh sửa hoặc phát hành lại** project này nếu chưa có sự đồng ý bằng văn bản.
+Dự án này được phát hành theo **GNU General Public License v3.0 (GPL-3.0)**.
 
+Bạn được quyền:
+- Sử dụng, sao chép và chỉnh sửa mã nguồn
+- Phát hành lại phiên bản đã chỉnh sửa
+
+Với điều kiện:
+- Mọi bản phân phối (kể cả đã chỉnh sửa) **phải sử dụng cùng license GPL-3.0**
+- Phải giữ nguyên thông báo bản quyền và license gốc
+
+Xem chi tiết tại file `LICENSE` hoặc tại trang chính thức của GPL v3.
