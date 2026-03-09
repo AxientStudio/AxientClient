@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "axientclient",
+  "version": "${version}",
+  "name": "AxientClient",
+  "description": "Feature-rich Fabric client mod by AxientStudio",
+  "authors": ["AxientStudio"],
+  "contact": {
+    "sources": "https://github.com/AxientStudio/AxientClient"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "asia.axientstudio.axientclient.AxientClient"
+    ]
+  },
+  "mixins": [
+    "axientclient.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.8",
+    "java": ">=21"
+  }
+}
