@@ -33,8 +33,8 @@ Tải `.jar` tại mục [Releases](https://github.com/TerAlone6300/AxientClient
 → Sau đó bỏ vào thư mục `mods` trong `.minecraft`
 
 Yêu cầu:
-- Minecraft Java 1.21.5  
-- Fabric Loader + Fabric API
+- Minecraft Java 1.21.8  
+- Fabric Loader Lastest
 
 ---
 
