@@ -1,39 +1,46 @@
 package asia.axientstudio.axientclient.features;
 
-import asia.axientstudio.axientclient.AxientClient;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.Perspective;
+import net.minecraft.client.util.InputUtil;
+import org.lwjgl.glfw.GLFW;
 
 public class FreelookFeature {
 
     public static boolean active = false;
-    private static float savedYaw, savedPitch;
+    public static int keyScancode = GLFW.GLFW_KEY_LEFT_ALT;
+
+    private static float savedYaw   = 0;
+    private static float savedPitch = 0;
+    private static Perspective savedPerspective = Perspective.FIRST_PERSON;
 
     public static void tick(MinecraftClient mc) {
-        if (!AxientClient.config.freelookEnabled) {
-            if (active) stopFreelook(mc);
-            return;
-        }
-        boolean pressed = AxientClient.freelookKey.isPressed();
+        if (mc.player == null) return;
+
+        boolean pressed = InputUtil.isKeyPressed(mc.getWindow().getHandle(), keyScancode);
+
         if (pressed && !active) {
-            startFreelook(mc);
-        } else if (!pressed && active) {
-            stopFreelook(mc);
-        }
-    }
-
-    private static void startFreelook(MinecraftClient mc) {
-        active = true;
-        if (mc.player != null) {
-            savedYaw = mc.player.getYaw();
+            active = true;
+            savedYaw   = mc.player.getYaw();
             savedPitch = mc.player.getPitch();
-        }
-    }
-
-    private static void stopFreelook(MinecraftClient mc) {
-        active = false;
-        if (mc.player != null) {
+            savedPerspective = mc.options.getPerspective();
+            if (savedPerspective == Perspective.FIRST_PERSON) {
+                mc.options.setPerspective(Perspective.THIRD_PERSON_BACK);
+            }
+        } else if (!pressed && active) {
+            active = false;
             mc.player.setYaw(savedYaw);
             mc.player.setPitch(savedPitch);
+            if (savedPerspective == Perspective.FIRST_PERSON) {
+                mc.options.setPerspective(Perspective.FIRST_PERSON);
+            }
+        }
+
+        if (active && mc.player != null) {
+            mc.player.setYaw(savedYaw);
+            mc.player.setPitch(savedPitch);
+            mc.player.bodyYaw = savedYaw;
+            mc.player.headYaw = savedYaw;
         }
     }
 }

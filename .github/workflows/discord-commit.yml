@@ -1,0 +1,12 @@
+name: Discord Commit Notify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: AxientStudio/.github/.github/workflows/discord-commit.yml@main
+    secrets:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}

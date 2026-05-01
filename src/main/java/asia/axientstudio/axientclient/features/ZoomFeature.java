@@ -1,36 +1,21 @@
 package asia.axientstudio.axientclient.features;
 
-import asia.axientstudio.axientclient.AxientClient;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
+import org.lwjgl.glfw.GLFW;
 
 public class ZoomFeature {
-
-    public static boolean zooming = false;
-    private static float originalFov = 70f;
-    private static float currentZoom;
-    private static final float SMOOTH_SPEED = 0.15f;
+    public static boolean active = false;
+    public static float   zoomFov = 15.0f;
+    public static int     keyScancode = GLFW.GLFW_KEY_C;
 
     public static void tick(MinecraftClient mc) {
-        if (!AxientClient.config.zoomEnabled) {
-            zooming = false;
-            return;
-        }
-        zooming = AxientClient.zoomKey.isPressed();
-        if (zooming) {
-            currentZoom = AxientClient.config.zoomFov;
-        }
+        if (mc.player == null) return;
+        active = InputUtil.isKeyPressed(mc.getWindow().getHandle(), keyScancode);
     }
 
-    /**
-     * Called from GameRendererMixin to modify FOV.
-     */
-    public static float modifyFov(float fov) {
-        if (!zooming) {
-            originalFov = fov;
-            return fov;
-        }
-        // Smooth zoom
-        originalFov += (currentZoom - originalFov) * SMOOTH_SPEED;
-        return originalFov;
+    public static float modifyFov(float original) {
+        if (!active) return original;
+        return zoomFov;
     }
 }

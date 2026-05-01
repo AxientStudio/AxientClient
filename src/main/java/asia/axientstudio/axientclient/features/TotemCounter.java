@@ -5,32 +5,21 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 
 public class TotemCounter {
-
-    // Track totems used by enemies (incremented via mixin on totem pop event)
     private static int enemyTotemsUsed = 0;
 
     public static int count(ClientPlayerEntity player) {
+        if (player == null) return 0;
         int total = 0;
-        ItemStack mainHand = player.getMainHandStack();
-        ItemStack offHand  = player.getOffHandStack();
-        if (mainHand.isOf(Items.TOTEM_OF_UNDYING)) total += mainHand.getCount();
-        if (offHand.isOf(Items.TOTEM_OF_UNDYING))  total += offHand.getCount();
+        if (player.getMainHandStack().isOf(Items.TOTEM_OF_UNDYING)) total += player.getMainHandStack().getCount();
+        if (player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING))  total += player.getOffHandStack().getCount();
         for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.isOf(Items.TOTEM_OF_UNDYING)) total += stack.getCount();
+            ItemStack s = player.getInventory().getStack(i);
+            if (s.isOf(Items.TOTEM_OF_UNDYING)) total += s.getCount();
         }
         return total;
     }
 
-    public static void onEnemyTotemUsed() {
-        enemyTotemsUsed++;
-    }
-
-    public static void resetEnemyCount() {
-        enemyTotemsUsed = 0;
-    }
-
-    public static int getEnemyTotemsUsed() {
-        return enemyTotemsUsed;
-    }
+    public static void onEnemyTotemUsed() { enemyTotemsUsed++; }
+    public static void resetEnemyCount()  { enemyTotemsUsed = 0; }
+    public static int getEnemyTotemsUsed() { return enemyTotemsUsed; }
 }

@@ -13,9 +13,8 @@
     "ItemRendererMixin",
     "HandledScreenMixin",
     "KeyBindingRegistryMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "GammaMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+  "injectors": { "defaultRequire": 1 }
 }

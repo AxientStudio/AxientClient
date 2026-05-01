@@ -1,96 +1,63 @@
 package asia.axientstudio.axientclient.config;
 
 import asia.axientstudio.axientclient.AxientClient;
+import asia.axientstudio.axientclient.features.GammaFeature;
+import asia.axientstudio.axientclient.features.SneakSprintToggle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-
 import java.io.*;
 import java.nio.file.Path;
 
 public class AxientConfig {
-
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("axientclient.json");
+    private static final Path PATH = FabricLoader.getInstance().getConfigDir().resolve("axientclient.json");
 
-    // ── Language ──
-    public String language = "en"; // "en" or "vi"
+    // Modules
+    public boolean keystrokesEnabled    = true;
+    public boolean coordsEnabled        = true;
+    public boolean pingEnabled          = true;
+    public boolean totemCountEnabled    = true;
+    public boolean inventoryHubEnabled  = true;
+    public boolean armorHubEnabled      = true;
+    public boolean sneakSprintEnabled   = true;
+    public boolean compassBarEnabled    = true;
+    public boolean freelookEnabled      = true;
+    public boolean zoomEnabled          = true;
+    public boolean gammaEnabled         = false;
 
-    // ── Keystrokes ──
-    public boolean keystrokesEnabled = true;
+    // Settings - Overlays
+    public boolean lowFireEnabled       = false;
+    public float   lowFireHeight        = 0.5f;
+    public boolean lowShieldEnabled     = false;
+    public float   lowShieldHeight      = 0.5f;
+    public boolean weaponSizeEnabled    = false;
+    public float   weaponX              = 0.0f;
+    public float   weaponY              = 0.0f;
+    public float   weaponScale          = 1.0f;
 
-    // ── Coords & Biome ──
-    public boolean coordsEnabled = true;
-
-    // ── SneakSprintToggle ──
-    public boolean sneakToggleEnabled = false;
-    public boolean sprintToggleEnabled = false;
-
-    // ── Freelook ──
-    public boolean freelookEnabled = true;
-
-    // ── Gamma ──
-    public boolean gammaEnabled = false;
-    public double gammaValue = 10.0; // 1000%
-
-    // ── Shader Warning ──
+    // Settings - Utilities
+    public boolean quickServerEnabled   = true;
+    public String  quickServerAddress   = "";
     public boolean shaderWarningEnabled = true;
+    public boolean autoUpdate           = true;
 
-    // ── Quick Server Switch ──
-    public boolean quickServerEnabled = true;
-    public String quickServerAddress = "";
+    // Module configs
+    public String  gammaMode            = "GAMMA";   // GammaFeature.Mode name
+    public double  gammaValue           = 10.0;
+    public String  sprintMode           = "HOLD";    // SneakSprintToggle.SprintMode name
+    public String  sneakMode            = "HOLD";
+    public int     freelookKey          = 344;        // GLFW_KEY_LEFT_ALT
+    public int     zoomKey              = 67;         // GLFW_KEY_C
+    public int     compassBgColor       = 0xAA000000; // ARGB
+    public boolean zoomEnabled2         = true;
 
-    // ── Mod Detector ──
-    public boolean modDetectorEnabled = true;
-
-    // ── Armor Hub ──
-    public boolean armorHubEnabled = true;
-
-    // ── Inventory Hub ──
-    public boolean inventoryHubEnabled = true;
-
-    // ── GitHub Update ──
-    public boolean autoUpdate = true;
-
-    // ── Fire & Shield Height ──
-    public boolean fireHeightEnabled = false;
-    public float fireHeightOffset = 0.0f;
-    public boolean shieldHeightEnabled = false;
-    public float shieldHeightOffset = 0.0f;
-
-    // ── Weapon Size & Swing Speed ──
-    public boolean weaponSizeEnabled = false;
-    public float weaponScale = 1.0f;
-    public boolean weaponSwingEnabled = false;
-    public float weaponSwingSpeed = 1.0f;
-
-    // ── Scoreboard ──
-    public boolean scoreboardEnabled = true;
-    public float scoreboardScale = 1.0f;   // 0 = hidden
-    public boolean scoreboardVisible = true;
-
-    // ── Ping ──
-    public boolean pingEnabled = true;
-
-    // ── TotemCount ──
-    public boolean totemCountEnabled = true;
-
-    // ── Zoom ──
-    public boolean zoomEnabled = true;
-    public float zoomFov = 15.0f;
-
-    // ── Position Hub ──
-    public boolean positionHubEnabled = true;
-
-    // ──────────────────────────────────────────
     public static AxientConfig load() {
-        if (CONFIG_PATH.toFile().exists()) {
-            try (Reader reader = new FileReader(CONFIG_PATH.toFile())) {
-                AxientConfig cfg = GSON.fromJson(reader, AxientConfig.class);
-                if (cfg != null) return cfg;
-            } catch (Exception e) {
-                AxientClient.LOGGER.error("[AxientClient] Failed to load config, using defaults", e);
-            }
+        if (PATH.toFile().exists()) {
+            try (Reader r = new FileReader(PATH.toFile())) {
+                AxientConfig c = GSON.fromJson(r, AxientConfig.class);
+                if (c != null) return c;
+            } catch (Exception e) { AxientClient.LOGGER.error("Config load fail", e); }
         }
         AxientConfig def = new AxientConfig();
         def.save();
@@ -98,10 +65,24 @@ public class AxientConfig {
     }
 
     public void save() {
-        try (Writer writer = new FileWriter(CONFIG_PATH.toFile())) {
-            GSON.toJson(this, writer);
-        } catch (Exception e) {
-            AxientClient.LOGGER.error("[AxientClient] Failed to save config", e);
-        }
+        try (Writer w = new FileWriter(PATH.toFile())) { GSON.toJson(this, w); }
+        catch (Exception e) { AxientClient.LOGGER.error("Config save fail", e); }
+    }
+
+    public void applyToFeatures() {
+        try { GammaFeature.mode = GammaFeature.Mode.valueOf(gammaMode); } catch (Exception ignored) {}
+        GammaFeature.gammaValue = gammaValue;
+        try { SneakSprintToggle.sprintMode = SneakSprintToggle.SprintMode.valueOf(sprintMode); } catch (Exception ignored) {}
+        try { SneakSprintToggle.sneakMode  = SneakSprintToggle.SneakMode.valueOf(sneakMode);   } catch (Exception ignored) {}
+        asia.axientstudio.axientclient.features.FreelookFeature.keyScancode = freelookKey;
+        asia.axientstudio.axientclient.features.ZoomFeature.keyScancode = zoomKey;
+        asia.axientstudio.axientclient.features.ZoomFeature.zoomFov = 15.0f;
+    }
+
+    public void syncFromFeatures() {
+        gammaMode  = GammaFeature.mode.name();
+        gammaValue = GammaFeature.gammaValue;
+        sprintMode = SneakSprintToggle.sprintMode.name();
+        sneakMode  = SneakSprintToggle.sneakMode.name();
     }
 }
