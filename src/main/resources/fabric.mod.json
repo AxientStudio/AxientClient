@@ -4,8 +4,8 @@
   "version": "1.0.1",
   "name": "AxientClient",
   "description": "Feature-rich client mod by AxientStudio",
-  "authors": ["AxientStudio, TerAlone"],
-  "license": "GPL-3.0-only",
+  "authors": ["AxientStudio"],
+  "license": "MIT",
   "environment": "client",
   "entrypoints": {
     "client": ["asia.axientstudio.axientclient.AxientClient"]
